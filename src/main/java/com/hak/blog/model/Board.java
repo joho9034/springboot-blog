@@ -1,20 +1,21 @@
 package com.hak.blog.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
-
-import com.hak.blog.model.User.UserBuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,9 +42,12 @@ public class Board {
 	@ColumnDefault("0")
 	private int count;
 	
-	@ManyToOne // Many = Board, One = User
+	@ManyToOne(fetch = FetchType.EAGER) // Many = Board, One = User
 	@JoinColumn(name = "userId")
 	private User user;
+	
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER) //mappedBy가 있으면 연관관계의 주인이 아님. 컬럼을 생성하지 않음
+	private List<Reply> replyList;
 	
 	@CreationTimestamp
 	private Timestamp createDate;
