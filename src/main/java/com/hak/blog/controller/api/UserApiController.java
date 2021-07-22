@@ -1,5 +1,7 @@
 package com.hak.blog.controller.api;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +15,8 @@ import com.hak.blog.service.UserService;
 public class UserApiController {
 
 	private UserService userService;
-	
-	public UserApiController(UserService userSerivce) {
+		
+	public UserApiController(HttpSession session, UserService userSerivce) {
 		this.userService = userSerivce;
 	}
 	
@@ -24,4 +26,16 @@ public class UserApiController {
 		userService.save(user);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
+	
+//	@PostMapping("/api/user/login")
+//	public ResponseDto<Integer> login(@RequestBody User user, HttpSession session) {
+//		System.out.println("UserApiController: login 호출됨");
+//		User principal = userService.login(user);
+//		
+//		if (null != principal) {
+//			session.setAttribute("principal", principal);
+//		}
+//		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+//	}
+	
 }
