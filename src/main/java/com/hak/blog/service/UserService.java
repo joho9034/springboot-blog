@@ -1,5 +1,6 @@
 package com.hak.blog.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,19 +13,19 @@ public class UserService {
 
 	private UserRepository userRepository;
 	
-	public UserService(UserRepository userRepository) {
+	private BCryptPasswordEncoder encoder;
+	
+	public UserService(UserRepository userRepository, BCryptPasswordEncoder encoder) {
 		this.userRepository = userRepository;
+		this.encoder = encoder;
 	}
 	
 	@Transactional
 	public void save(User user) {
+		String encPassword = encoder.encode(user.getPassword());
+		user.setPassword(encPassword);
 		user.setRole(RoleType.USER);
 		userRepository.save(user);
-	}
-	
-	@Transactional(readOnly = true)
-	public User login(User user) {
-		return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
 	}
 	
 }
