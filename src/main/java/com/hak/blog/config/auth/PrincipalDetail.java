@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.hak.blog.model.User;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class PrincipalDetail implements UserDetails {
 
 	private User user;
