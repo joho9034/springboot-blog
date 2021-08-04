@@ -12,9 +12,10 @@
 	  <div class="form-group">
 	    <label for="password">Password</label>
 	    <input type="password" class="form-control" placeholder="Enter password" id="password" name="password">
-	  </div>
+	  </div>                                    
 
 	  <button class="btn btn-primary" id="btn-login">로그인</button>
+	  <a href="#"><img src="/img/kakao_login_button.jpg" height="38px" /></a>
 	</form>
 
 </div>
