@@ -15,7 +15,7 @@
 	  </div>                                    
 
 	  <button class="btn btn-primary" id="btn-login">로그인</button>
-	  <a href="#"><img src="/img/kakao_login_button.jpg" height="38px" /></a>
+	  <a href="#"><img src="/image/kakao_login_button.jpg" height="38px" /></a>
 	</form>
 
 </div>
