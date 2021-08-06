@@ -39,4 +39,10 @@ public class UserService {
 		return updUser;
 	}
 	
+	@Transactional(readOnly = true)
+	public User findMember(String username) {
+		User user = userRepository.findByUsername(username);
+		return user;
+	}
+	
 }

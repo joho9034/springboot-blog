@@ -1,5 +1,7 @@
 package com.hak.blog.controller;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,10 +17,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hak.blog.model.OAuthToken;
+import com.hak.blog.model.User;
+import com.hak.blog.service.UserService;
 
 @Controller
 public class UserController {
 
+	private UserService userService;
+	
+	public UserController(UserService userSerivce) {
+		this.userService = userSerivce;
+	}
+	
 	@GetMapping("/auth/joinForm")
 	public String joinForm() {
 		return "user/joinForm";
@@ -93,8 +103,19 @@ public class UserController {
 		}
 		System.out.println("카카오 프로파일 ID: " + kakaoProfile.getId());
 		System.out.println("카카오 프로파일 Email: " + kakaoProfile.getKakao_account().getEmail());
+		//kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId()
+		//kakaoProfile.getKakao_account().getEmail()
+		UUID trashPassword = UUID.randomUUID();
+		User user = User.builder()
+				.username(kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId())
+				.password(trashPassword)
+				.email(kakaoProfile.getKakao_account().getEmail())
+				.build();
 		
-		return response2.getBody();
+		//가입자 혹은 미가입자 여부 체크
+		User originUuserService.save(user);
+		
+		return "회원가입 완료";
 	}
 	
 	@GetMapping("/user/updateForm")
