@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -121,7 +122,7 @@ public class UserController {
 		UUID randomPassword = UUID.randomUUID();
 		User kakaoUser = User.builder()
 				.username(kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId())
-				.password(randomPassword)
+				.password(randomPassword.toString())
 				.email(kakaoProfile.getKakao_account().getEmail())
 				.oauth("kakao")
 				.build();
