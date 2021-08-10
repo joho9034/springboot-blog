@@ -2,20 +2,28 @@ package com.hak.blog.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hak.blog.config.auth.PrincipalDetail;
+import com.hak.blog.model.KakaoProfile;
 import com.hak.blog.model.OAuthToken;
 import com.hak.blog.model.User;
 import com.hak.blog.service.UserService;
@@ -23,6 +31,11 @@ import com.hak.blog.service.UserService;
 @Controller
 public class UserController {
 
+//	@Value("${hak.key}")
+//	private String hakKey;
+	
+//	private AuthenticationManager authenticationManager;
+	
 	private UserService userService;
 	
 	public UserController(UserService userSerivce) {
@@ -40,7 +53,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/auth/kakao/callback")
-	public @ResponseBody String kakaoCallback(String code) {
+	public String kakaoCallback(String code, @AuthenticationPrincipal PrincipalDetail principal, HttpSession session) {
 		//POST 방식으로 key=value 데이터 요청
 		//Retrofit2 -> 주로 android 에서 사용
 		//OkHttp
@@ -105,17 +118,37 @@ public class UserController {
 		System.out.println("카카오 프로파일 Email: " + kakaoProfile.getKakao_account().getEmail());
 		//kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId()
 		//kakaoProfile.getKakao_account().getEmail()
-		UUID trashPassword = UUID.randomUUID();
-		User user = User.builder()
+		UUID randomPassword = UUID.randomUUID();
+		User kakaoUser = User.builder()
 				.username(kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId())
-				.password(trashPassword)
+				.password(randomPassword)
 				.email(kakaoProfile.getKakao_account().getEmail())
+				.oauth("kakao")
 				.build();
 		
 		//가입자 혹은 미가입자 여부 체크
-		User originUuserService.save(user);
+		User originUser = userService.findMember(kakaoUser.getUsername());
+		if (originUser.getUsername() == null) {
+			System.out.println("기존 회원이 아니어서 자동 회원가입을 진행합니다...");
+			userService.save(kakaoUser);
+			
+			principal.setUser(userService.findMember(kakaoUser.getUsername()));
+		} else {
+			System.out.println("기존 회원입니다...");
+			principal.setUser(originUser);
+		}
 		
-		return "회원가입 완료";
+		//로그인 처리
+		System.out.println("자동 로그인을 진행합니다...");
+//		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), hakKey));
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+		Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+		SecurityContext context = SecurityContextHolder.getContext();
+		context.setAuthentication(authentication);
+		session.setAttribute("SPRING_SECURITY_CONTEXT", context);
+		
+		return "redirect:/";
 	}
 	
 	@GetMapping("/user/updateForm")

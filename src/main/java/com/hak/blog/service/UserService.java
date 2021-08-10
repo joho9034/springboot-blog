@@ -33,15 +33,21 @@ public class UserService {
 		User updUser = userRepository.findById(user.getId()).orElseThrow(() -> {
 			return new IllegalArgumentException("회원 찾기 실패");
 		});
-		String encPassword = encoder.encode(user.getPassword());
-		updUser.setPassword(encPassword);
-		updUser.setEmail(user.getEmail());
+		
+		if (updUser.getOauth() == null || updUser.getOauth().equals("")) {
+			String encPassword = encoder.encode(user.getPassword());
+			updUser.setPassword(encPassword);
+			updUser.setEmail(user.getEmail());
+		}
+		
 		return updUser;
 	}
 	
 	@Transactional(readOnly = true)
 	public User findMember(String username) {
-		User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username).orElseGet(() -> {
+			return new User();
+		});
 		return user;
 	}
 	
