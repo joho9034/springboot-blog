@@ -5,30 +5,30 @@ import lombok.Data;
 @Data
 public class KakaoProfile {
 	
-	public int id;
-	public String connected_at;
-	public Properties properties;
-	public Kakao_account kakao_account;
+	private int id;
+	private String connected_at;
+	private Properties properties;
+	private Kakao_account kakao_account;
 	
 	@Data
 	public class Properties {
-		public String nickname;
+		private String nickname;
 	}
 	
 	@Data
 	public class Kakao_account {
-		public boolean profile_nickname_needs_agreement;
-		public Profile profile;
-		public boolean has_email;
-		public boolean email_needs_agreement;
-		public boolean is_email_valid;
-		public boolean is_email_verified;
-		public String email;
+		private boolean profile_nickname_needs_agreement;
+		private Profile profile;
+		private boolean has_email;
+		private boolean email_needs_agreement;
+		private boolean is_email_valid;
+		private boolean is_email_verified;
+		private String email;
 	}
 	
 	@Data
 	public class Profile {
-		public String nickname;
+		private String nickname;
 	}
 	
 }

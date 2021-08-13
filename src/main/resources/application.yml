@@ -15,8 +15,8 @@ spring:
       
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3310/blog?serverTimezone=Asia/Seoul
-    url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3310/blog?serverTimezone=Asia/Seoul&validationQuery="select 1"
+    #url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul&validationQuery="select 1"
     username: hak
     password: hak1234
     
@@ -27,13 +27,11 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
-    #show-sql: true
     properties:
-      hibernate.format_sql: true
+      hibernate:
+        #show-sql: true
+        format_sql: true
 
   jackson:
     serialization:
       fail-on-empty-beans: false
-      
-hak:
-  key: hak1234

@@ -13,9 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +48,8 @@ public class Board {
 	private User user;
 	
 	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER) //mappedBy가 있으면 연관관계의 주인이 아님. 컬럼을 생성하지 않음
+	@JsonIgnoreProperties({"board"})
+	@OrderBy("id desc")
 	private List<Reply> replyList;
 	
 	@CreationTimestamp

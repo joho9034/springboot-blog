@@ -40,16 +40,16 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board/{id}")
-	public String find(@PathVariable int id, Model model) {
+	public String detail(@PathVariable int id, Model model) {
 //		System.out.println("ID: " + id);
-		model.addAttribute("board", boardService.find(id));
+		model.addAttribute("board", boardService.detail(id));
 		return "board/detail";
 	}
 	
 	@GetMapping("/board/{id}/updateForm")
 	public String updateForm(@PathVariable int id, Model model) {
 //		System.out.println("ID: " + id);
-		model.addAttribute("board", boardService.find(id));
+		model.addAttribute("board", boardService.detail(id));
 		return "board/updateForm";
 	}
 	
