@@ -3,6 +3,7 @@ package com.hak.blog.model;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,7 +48,7 @@ public class Board {
 	@JoinColumn(name = "userId")
 	private User user;
 	
-	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER) //mappedBy가 있으면 연관관계의 주인이 아님. 컬럼을 생성하지 않음
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //mappedBy가 있으면 연관관계의 주인이 아님. 컬럼을 생성하지 않음
 	@JsonIgnoreProperties({"board"})
 	@OrderBy("id desc")
 	private List<Reply> replyList;

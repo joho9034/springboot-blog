@@ -38,13 +38,15 @@
   <br />
   <div class="card">
 	<div class="card-header">댓글 리스트</div>
-	<ul class="list-group" id="reply--box">
+	<ul class="list-group" id="reply-box">
 	  <c:forEach var="reply" items="${board.replyList}">
-	  	  <li class="list-group-item d-flex justify-content-between" id="reply--1">
+	  	  <li class="list-group-item d-flex justify-content-between" id="reply-${reply.id}">
 	  	    <div>${reply.content}</div>
 	  	    <div class="d-flex">
 	  	      <div class="font-italic">작성자: ${reply.user.username}&nbsp;</div>
-	  	      <button class="badge">삭제</button>
+	  	      <c:if test="${reply.user.id == principal.user.id}">
+	  	        <button class="badge" onClick="index.replyDelete(${board.id}, ${reply.id})">삭제</button>
+	  	      </c:if>
 	  	  </li>
   	  </c:forEach>
 	</ul>
